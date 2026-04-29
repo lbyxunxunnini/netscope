@@ -69,6 +69,24 @@ docs/
 
 ## 5. Install & Build
 
+### 5.1 Remote Installation
+
+Clone directly from the remote repository:
+
+```bash
+git clone git@github.com:lbyxunxunnini/netscope.git
+cd netscope
+```
+
+Or use HTTPS:
+
+```bash
+git clone https://github.com/lbyxunxunnini/netscope.git
+cd netscope
+```
+
+### 5.2 Local Install & Build
+
 ```bash
 pnpm install
 pnpm build

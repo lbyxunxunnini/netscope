@@ -85,6 +85,24 @@ docs/
 
 ## 5. 安装与构建
 
+### 5.1 远端安装（Remote）
+
+可直接从远端仓库拉取：
+
+```bash
+git clone git@github.com:lbyxunxunnini/netscope.git
+cd netscope
+```
+
+或使用 HTTPS：
+
+```bash
+git clone https://github.com/lbyxunxunnini/netscope.git
+cd netscope
+```
+
+### 5.2 本地安装与构建
+
 在仓库根目录执行：
 
 ```bash
