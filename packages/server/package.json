@@ -1,0 +1,30 @@
+{
+  "name": "@netscope/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "netscope": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@netscope/shared": "workspace:*",
+    "ws": "^8.18.0",
+    "better-sqlite3": "^11.7.0",
+    "commander": "^12.1.0",
+    "open": "^10.1.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.12",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.0"
+  }
+}
