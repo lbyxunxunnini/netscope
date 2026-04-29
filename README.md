@@ -113,7 +113,7 @@ pnpm build
 可选：全局安装 `netscope` 命令（推荐用 `packages/server` 目录执行，避免 `--filter link --global` 在部分 pnpm 版本报错）
 
 ```bash
-cd /path/to/packet-capture/packages/server
+cd /path/to/netscope/packages/server
 pnpm build
 pnpm link --global
 ```
@@ -138,13 +138,41 @@ netscope --help
 
 ## 6. Flutter 侧接入
 
-在你的 Flutter 项目 `pubspec.yaml` 中引入（示例为本地路径）：
+### 6.1 本地路径依赖（开发联调）
+
+在你的 Flutter 项目 `pubspec.yaml` 中引入（本地路径）：
 
 ```yaml
 dependencies:
   netscope:
-    path: /Users/you/path/to/packet-capture/packages/dart-sdk
+    path: /Users/you/path/to/netscope/packages/dart-sdk
 ```
+
+### 6.2 远端 Git 依赖（推荐给团队）
+
+如果不想拷贝 SDK 到本地，可直接使用远端仓库子目录依赖：
+
+```yaml
+dependencies:
+  netscope:
+    git:
+      url: https://github.com/lbyxunxunnini/netscope.git
+      ref: main
+      path: packages/dart-sdk
+```
+
+也可使用 SSH 地址：
+
+```yaml
+dependencies:
+  netscope:
+    git:
+      url: git@github.com:lbyxunxunnini/netscope.git
+      ref: main
+      path: packages/dart-sdk
+```
+
+建议在可复现版本场景下把 `ref` 固定为 tag（如 `1.0.0`），避免随 `main` 漂移。
 
 在 `Dio` 初始化处添加：
 
@@ -178,7 +206,7 @@ flutter run
 再启动 NetScope：
 
 ```bash
-cd /path/to/packet-capture
+cd /path/to/netscope
 pnpm --filter @netscope/server start
 ```
 
@@ -258,6 +286,49 @@ netscope --project-root /absolute/path/to/flutter_project
 - `max-messages <n>` / `-mm <n>`：设置最大请求缓存数（下次启动生效）
 - `body-limit <n>` / `-bl <n>`：设置 body 截断上限字节数（下次启动生效）
 
+---
+
+## 10. CLI 产物与全局安装
+
+### 10.1 CLI 构建产物
+
+执行 `pnpm build` 后，CLI 产物在：
+
+- `packages/server/dist/index.js`（`netscope` 命令实际入口）
+
+其中 `packages/server/package.json` 已声明：
+
+- `bin.netscope -> ./dist/index.js`
+
+### 10.2 本地源码构建后全局安装
+
+```bash
+cd /path/to/netscope/packages/server
+pnpm build
+pnpm link --global
+```
+
+### 10.3 远程一键安装到全局（无需先 git clone）
+
+可直接从远端仓库执行全局安装（pnpm 会拉取仓库、安装依赖并执行 `prepare`）：
+
+```bash
+pnpm add -g "github:lbyxunxunnini/netscope#main&path:packages/server"
+```
+
+若要固定版本，建议使用 tag：
+
+```bash
+pnpm add -g "github:lbyxunxunnini/netscope#1.0.0&path:packages/server"
+```
+
+### 10.4 验证安装
+
+```bash
+which netscope
+netscope --help
+```
+
 配置文件位置：
 
 ```text
@@ -266,7 +337,7 @@ netscope --project-root /absolute/path/to/flutter_project
 
 ---
 
-## 10. HTTP API / WebSocket
+## 11. HTTP API / WebSocket
 
 ### HTTP
 
@@ -284,7 +355,7 @@ netscope --project-root /absolute/path/to/flutter_project
 
 ---
 
-## 11. 验证清单（建议）
+## 12. 验证清单（建议）
 
 1. 启动 `netscope` 后 Web 可打开
 2. 粘贴或嗅探 URI 后显示已附着
@@ -297,7 +368,7 @@ netscope --project-root /absolute/path/to/flutter_project
 
 ---
 
-## 12. 常见问题（FAQ）
+## 13. 常见问题（FAQ）
 
 ### Q1: 已附着但 `已检测到 SDK 事件=false`
 排查：
@@ -317,7 +388,7 @@ V1 仅保留当前 CLI 活跃会话数据，重启后不保留历史。
 
 ---
 
-## 13. 本地开发
+## 14. 本地开发
 
 ### 13.1 开发模式
 
@@ -340,6 +411,6 @@ pnpm build
 
 ---
 
-## 14. 版本说明
+## 15. 版本说明
 
 当前为 V1 实现，设计目标与边界以 `docs/requirements-spec-v1.md` 为准。

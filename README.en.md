@@ -95,7 +95,7 @@ pnpm build
 Optional global CLI install (recommended to run inside `packages/server`, since `--filter link --global` may fail on some pnpm versions):
 
 ```bash
-cd /path/to/packet-capture/packages/server
+cd /path/to/netscope/packages/server
 pnpm build
 pnpm link --global
 ```
@@ -120,13 +120,41 @@ netscope --help
 
 ## 6. Flutter Integration
 
+### 6.1 Local Path Dependency (for local development)
+
 In your Flutter `pubspec.yaml`:
 
 ```yaml
 dependencies:
   netscope:
-    path: /Users/you/path/to/packet-capture/packages/dart-sdk
+    path: /Users/you/path/to/netscope/packages/dart-sdk
 ```
+
+### 6.2 Remote Git Dependency (recommended for teams)
+
+Use the Dart SDK directly from this repository subdirectory:
+
+```yaml
+dependencies:
+  netscope:
+    git:
+      url: https://github.com/lbyxunxunnini/netscope.git
+      ref: main
+      path: packages/dart-sdk
+```
+
+Or with SSH:
+
+```yaml
+dependencies:
+  netscope:
+    git:
+      url: git@github.com:lbyxunxunnini/netscope.git
+      ref: main
+      path: packages/dart-sdk
+```
+
+For reproducible builds, pin `ref` to a tag (for example, `1.0.0`) instead of `main`.
 
 At `Dio` initialization:
 
@@ -158,7 +186,7 @@ flutter run
 Then:
 
 ```bash
-cd /path/to/packet-capture
+cd /path/to/netscope
 pnpm --filter @netscope/server start
 ```
 
@@ -255,7 +283,50 @@ Config file:
 
 ---
 
-## 11. Validation Checklist
+## 11. CLI Artifact & Global Install
+
+### 11.1 Build Artifact
+
+After `pnpm build`, the CLI artifact is:
+
+- `packages/server/dist/index.js` (actual `netscope` executable entry)
+
+`packages/server/package.json` maps:
+
+- `bin.netscope -> ./dist/index.js`
+
+### 11.2 Global Install from Local Source
+
+```bash
+cd /path/to/netscope/packages/server
+pnpm build
+pnpm link --global
+```
+
+### 11.3 Remote Global Install (without cloning first)
+
+Install directly from GitHub:
+
+```bash
+pnpm add -g "github:lbyxunxunnini/netscope#main&path:packages/server"
+```
+
+Pin to a tag when needed:
+
+```bash
+pnpm add -g "github:lbyxunxunnini/netscope#1.0.0&path:packages/server"
+```
+
+### 11.4 Verify
+
+```bash
+which netscope
+netscope --help
+```
+
+---
+
+## 12. Validation Checklist
 
 1. `netscope` starts and Web opens
 2. VM URI attaches successfully
@@ -268,7 +339,7 @@ Config file:
 
 ---
 
-## 12. FAQ
+## 13. FAQ
 
 ### SDK detected stays `false`
 Check:
@@ -288,7 +359,7 @@ V1 keeps only current active session data.
 
 ---
 
-## 13. Local Development
+## 14. Local Development
 
 ```bash
 pnpm dev
@@ -309,6 +380,6 @@ pnpm build
 
 ---
 
-## 14. Version Note
+## 15. Version Note
 
 This is V1. Scope and behavior are aligned with `docs/requirements-spec-v1.md`.
